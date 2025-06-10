@@ -1,0 +1,11 @@
+input,button,label{
+    margin:10px;
+    padding:10px;
+}
+
+footer{
+    bottom:0 ;
+    position: absolute;
+    width: 90%;
+    height: 40px;
+}
