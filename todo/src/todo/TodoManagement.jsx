@@ -6,7 +6,8 @@ import TodoComponent from "./TodoComponent";
 import LogOutComponent from "./LogOutComponent";
 import Error from "./Error";
 import AuthProvider, {useAuth} from "./security/AuthContext"
-
+import axios from "axios";
+import {useState} from "react";
 function AuthenticatedRouter({children})
 {
     const auth = useAuth();
@@ -48,9 +49,18 @@ export default  function Todo(){
     )
 }
 
-
 function Welcome()
 {
+    const [message, setMessage] = useState("");
+    function callRestApi()
+    {
+        axios.get('http://localhost:8080/hello-world-bean')
+            .then(res =>setMessage(res.data))
+            .catch(err => console.log(err))
+            .finally(()=>console.log("callRestApi"));
+    }
+
+
     const params = useParams();
     console.log(params.userName)
     return(
@@ -58,6 +68,8 @@ function Welcome()
 
             Welcome {params.userName}
             <Link to='/todos'> Your todo</Link>
+            <button className="btn btn-success m-5" onClick={callRestApi}>Success</button>
+            <div>{message.message}</div>
         </div>
     )
 }
