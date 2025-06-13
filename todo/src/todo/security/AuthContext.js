@@ -13,7 +13,7 @@ export default function AuthProvider({children}){
     const [number,setNumber]=useState(9);
     const [isAuthenticated,setAuthenticated] = useState(false)
     function login(username, password){
-        if(username.trim() === 'Mercia' || password.trim() === 'Mercia'){
+        if(username.trim() === 'in28minutes' || password.trim() === 'Mercia'){
             setAuthenticated(true)
             return true;
         }
