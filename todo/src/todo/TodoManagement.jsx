@@ -51,6 +51,7 @@ export default  function Todo(){
 
 function Welcome()
 {
+    const username = useAuth().username;
     const [message, setMessage] = useState("");
     function callRestApi()
     {
@@ -66,7 +67,7 @@ function Welcome()
     return(
         <div>
 
-            Welcome {params.userName}
+            Welcome {username}
             <Link to='/todos'> Your todo</Link>
             <button className="btn btn-success m-5" onClick={callRestApi}>Success</button>
             <div>{message.message}</div>

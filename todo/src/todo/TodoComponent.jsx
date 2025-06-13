@@ -1,8 +1,10 @@
 import {deleteTodoApi, getTodoApi} from "./callApi/TodoApi";
 import {useEffect, useState} from "react";
+import {useAuth} from "./security/AuthContext";
 
 export default function TodoComponent()
 {
+    const username = useAuth().username;
     const [todos,setTodos] = useState([])
     function deleteTodo(username,id)
     {
@@ -17,6 +19,8 @@ export default function TodoComponent()
             )
             .catch(err=>console.log(err));
     }
+
+
     function refreshTodos(username)
     {
         getTodoApi(username)
@@ -26,7 +30,7 @@ export default function TodoComponent()
             })
             .catch((err)=>console.log(err));
     }
-    useEffect(() => refreshTodos('in28minutes'),[])
+    useEffect(() => refreshTodos(username),[])
 
     return(
         <div className="container">
@@ -49,7 +53,7 @@ export default function TodoComponent()
                                 <td>{todo.description}</td>
                                 <td>{todo.done.toString()}</td>
                                 <td>{todo.targetDate.toString()}</td>
-                                <td><button className="btn btn-warning" onClick={()=>deleteTodo('in28minutes',todo.id)}>Delete</button></td>
+                                <td><button className="btn btn-warning" onClick={()=>deleteTodo(username,todo.id)}>Delete</button></td>
                                 <td><button className="btn btn-success">Update</button></td>
                             </tr>
                         )

@@ -10,15 +10,18 @@ export const useAuth=()=>useContext(AuthContext);
 // share the context
 
 export default function AuthProvider({children}){
+    const [username,setUsername] = useState(null)
     const [number,setNumber]=useState(9);
     const [isAuthenticated,setAuthenticated] = useState(false)
     function login(username, password){
         if(username.trim() === 'in28minutes' || password.trim() === 'Mercia'){
-            setAuthenticated(true)
+            setAuthenticated(true);
+            setUsername(username.trim())
             return true;
         }
         else
         {
+            setUsername(null);
             setAuthenticated(false);
             return false;
         }
@@ -28,7 +31,7 @@ export default function AuthProvider({children}){
     }
     setInterval(()=>setNumber(number+1),10000)
     return(
-        <AuthContext.Provider value={{number, isAuthenticated, setAuthenticated,login,logout}}>
+        <AuthContext.Provider value={{number, isAuthenticated, setAuthenticated,login,logout,username}}>
             {children}
         </AuthContext.Provider>
     )
