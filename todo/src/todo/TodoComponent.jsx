@@ -1,10 +1,12 @@
 import {deleteTodoApi, getTodoApi} from "./callApi/TodoApi";
 import {useEffect, useState} from "react";
 import {useAuth} from "./security/AuthContext";
+import {useNavigate} from "react-router-dom";
 
 export default function TodoComponent()
 {
     const username = useAuth().username;
+    const navigate = useNavigate();
     const [todos,setTodos] = useState([])
     function deleteTodo(username,id)
     {
@@ -20,6 +22,11 @@ export default function TodoComponent()
             .catch(err=>console.log(err));
     }
 
+   function updateTodo(id)
+   {
+       console.log('update '+id)
+       navigate(`/updateTodo/${id}`)
+   }
 
     function refreshTodos(username)
     {
@@ -31,7 +38,6 @@ export default function TodoComponent()
             .catch((err)=>console.log(err));
     }
     useEffect(() => refreshTodos(username),[])
-
     return(
         <div className="container">
             <table className="table">
@@ -54,7 +60,7 @@ export default function TodoComponent()
                                 <td>{todo.done.toString()}</td>
                                 <td>{todo.targetDate.toString()}</td>
                                 <td><button className="btn btn-warning" onClick={()=>deleteTodo(username,todo.id)}>Delete</button></td>
-                                <td><button className="btn btn-success">Update</button></td>
+                                <td><button className="btn btn-success" onClick={()=>updateTodo(todo.id)}>Update</button></td>
                             </tr>
                         )
                     )

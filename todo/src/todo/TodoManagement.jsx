@@ -8,6 +8,7 @@ import Error from "./Error";
 import AuthProvider, {useAuth} from "./security/AuthContext"
 import axios from "axios";
 import {useState} from "react";
+import UpdateTodoComponent from "./UpdateTodoComponent";
 function AuthenticatedRouter({children})
 {
     const auth = useAuth();
@@ -34,6 +35,11 @@ export default  function Todo(){
                    <AuthenticatedRouter>
                    <TodoComponent />
                        </AuthenticatedRouter>
+               }></Route>
+               <Route path='/updateTodo/:id' element={
+                   <AuthenticatedRouter>
+                       <UpdateTodoComponent />
+                   </AuthenticatedRouter>
                }></Route>
                <Route path='/logout' element={
                    <AuthenticatedRouter>
