@@ -2,7 +2,7 @@ import {useAuth} from "./security/AuthContext";
 import {useParams} from "react-router-dom";
 import {retrieveTodoApi} from "./callApi/TodoApi";
 import {useEffect, useState} from "react";
-import {Field, Form, Formik} from "formik";
+import {ErrorMessage, Field, Form, Formik} from "formik";
 
 
 export default function UpdateTodoComponent()
@@ -27,14 +27,45 @@ export default function UpdateTodoComponent()
     {
         console.log(values)
     }
+
+    function validate(values)
+    {
+        let errors={
+            // description:"Enter a valid description",
+            // targetDate: "Enter a valid targetDate",
+        }
+        if(values.description.length<5)
+            errors.description="Please enter atleast 5 characters"
+        if(values.targetDate==null)
+            errors.targetDate="Please enter a valid date"
+       console.log(values)
+        return errors;
+    }
+
     useEffect(()=>retrieve() , [id])
     return(
         <div className="container">
             <h1>Enter todo details:</h1>
-            <Formik onSubmit={onSubmit} initialValues={{description,targetDate}} enableReinitialize={true}>
+            <Formik onSubmit={onSubmit}
+                    initialValues={{description,targetDate}}
+                    enableReinitialize={true}
+             validate={validate}
+              validateOnChange={false}
+            validateOnBlur={false}>
                 {
                     (props)=>(
                         <Form>
+                            <ErrorMessage
+                                name="description"
+                                component="div"
+                                className="alert alert-warning"
+                            />
+
+                            <ErrorMessage
+                                name="targetDate"
+                                component="div"
+                                className="alert alert-warning"
+                            />
                             <fieldset className="form-group">
                                 <label>Enter the description:</label>
                                 <Field type="text" className="form-control" name="description" ></Field>
