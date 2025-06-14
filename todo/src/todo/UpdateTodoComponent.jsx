@@ -1,6 +1,6 @@
 import {useAuth} from "./security/AuthContext";
-import {useParams} from "react-router-dom";
-import {retrieveTodoApi} from "./callApi/TodoApi";
+import {useNavigate, useParams} from "react-router-dom";
+import {retrieveTodoApi, updateTodoApi} from "./callApi/TodoApi";
 import {useEffect, useState} from "react";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 
@@ -12,6 +12,7 @@ export default function UpdateTodoComponent()
     const {id} = useParams()
     const [description, setDescription] = useState("")
     const [targetDate, setTargetDate] = useState(new Date())
+    const navigate = useNavigate();
     function retrieve()
     {
        retrieveTodoApi(username,id)
@@ -26,6 +27,17 @@ export default function UpdateTodoComponent()
     function onSubmit(values)
     {
         console.log(values)
+        const todo={
+            id:id,
+            username: username,
+            description: values.description,
+            targetDate:values.targetDate,
+            done:false
+        }
+        console.log(todo)
+        updateTodoApi(username,id,todo)
+            .then(()=>navigate('/todos'))
+            .catch(err=>console.log(err))
     }
 
     function validate(values)
@@ -47,7 +59,7 @@ export default function UpdateTodoComponent()
         <div className="container">
             <h1>Enter todo details:</h1>
             <Formik onSubmit={onSubmit}
-                    initialValues={{description,targetDate}}
+                    initialValues={{description:description,targetDate:targetDate}}
                     enableReinitialize={true}
              validate={validate}
               validateOnChange={false}
@@ -75,7 +87,7 @@ export default function UpdateTodoComponent()
                                 <label>Enter the target date:</label>
                                 <Field type="date" className="form-control" name="targetDate"></Field>
                             </fieldset>
-                            <div><button className="btn btn-success m-5" type="submit">Submit</button></div>
+                            <div><button className="btn btn-success m-5" type="submit" onClick={onSubmit}>Submit</button></div>
                         </Form>
                     )
                 }
