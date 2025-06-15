@@ -1,6 +1,6 @@
 import {useAuth} from "./security/AuthContext";
 import {useNavigate, useParams} from "react-router-dom";
-import {retrieveTodoApi, updateTodoApi} from "./callApi/TodoApi";
+import {addTodoApi, retrieveTodoApi, updateTodoApi} from "./callApi/TodoApi";
 import {useEffect, useState} from "react";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 
@@ -15,18 +15,20 @@ export default function UpdateTodoComponent()
     const navigate = useNavigate();
     function retrieve()
     {
-       retrieveTodoApi(username,id)
-           .then(res=>
-           {
-               console.log(res)
-               setDescription(res.data.description)
-               setTargetDate(res.data.targetDate)
-           })
-           .catch(err=>console.log(err))
+        if(id!== '-1')//for adding new
+        {
+            retrieveTodoApi(username, id)
+                .then(res => {
+                    console.log(res)
+                    setDescription(res.data.description)
+                    setTargetDate(res.data.targetDate)
+                })
+                .catch(err => console.log(err))
+        }
     }
     function onSubmit(values)
     {
-        console.log(values)
+
         const todo={
             id:id,
             username: username,
@@ -34,10 +36,23 @@ export default function UpdateTodoComponent()
             targetDate:values.targetDate,
             done:false
         }
-        console.log(todo)
-        updateTodoApi(username,id,todo)
-            .then(()=>navigate('/todos'))
-            .catch(err=>console.log(err))
+
+        if(id!== '-1') {
+            updateTodoApi(username, id, todo)
+                .then(() => navigate('/todos'))
+                .catch(err => console.log(err))
+        }
+        else
+        {
+            console.log('add todo')
+            addTodoApi(username,todo)
+                .then((res)=>
+                {
+                    console.log(res)
+                    navigate('/todos')
+                })
+                .catch(err => console.log(err))
+        }
     }
 
     function validate(values)
@@ -87,7 +102,7 @@ export default function UpdateTodoComponent()
                                 <label>Enter the target date:</label>
                                 <Field type="date" className="form-control" name="targetDate"></Field>
                             </fieldset>
-                            <div><button className="btn btn-success m-5" type="submit" onClick={onSubmit}>Submit</button></div>
+                            <div><button className="btn btn-success m-5" type="submit">Submit</button></div>
                         </Form>
                     )
                 }

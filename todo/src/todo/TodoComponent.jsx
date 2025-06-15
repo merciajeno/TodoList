@@ -27,7 +27,11 @@ export default function TodoComponent()
        console.log('update '+id)
        navigate(`/updateTodo/${id}`)
    }
-
+  function addTodo()
+  {
+      console.log('clic')
+      navigate('/updateTodo/-1')
+  }
     function refreshTodos(username)
     {
         getTodoApi(username)
@@ -68,6 +72,9 @@ export default function TodoComponent()
 
                 </tbody>
             </table>
+            <div>
+                <button className="btn btn-success m-5" onClick={addTodo}>Add new todo</button>
+            </div>
         </div>
     )
 }

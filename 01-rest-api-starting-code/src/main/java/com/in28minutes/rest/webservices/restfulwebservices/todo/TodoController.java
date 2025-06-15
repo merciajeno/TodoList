@@ -38,6 +38,7 @@ public class TodoController {
 	@PutMapping("/{username}/updateTodo/{id}")
 	public Todo updateTodo(@PathVariable String username,@PathVariable int id,@RequestBody Todo todo)
 	{
+	    System.out.println("hello");
 		todoService.updateTodo(todo);
 		return todo;
 	}
